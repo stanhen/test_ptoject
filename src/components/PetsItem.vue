@@ -1,20 +1,22 @@
 <template>
 <div @click="open_info" class="pet">
-   <img class="pet_photo"
+   <img v-if="pet.photo" class="pet_photo"
       width="220"
       height="220"     
       :src=pet.photo
       :alt="small"
    >
-   <h2>{{pet.name}}</h2>
+   <img v-if="!pet.photo" class="pet_photo"
+      width="220"
+      height="220"     
+      src="https://www.tsum.by/upload/no-photo.png"
+      alt="small"
+   >   
+   <h2>{{pet.name.substr(0,6)}}</h2>
    <div>
-     {{pet.age}} &bull;  {{pet.breed}}
+     {{pet.age}} &bull;  {{pet.breed.substr(0,6)}}
  
    </div>
-
-
-
-  <!--<router-link :to="'/pet/' + pet.id">More</router-link> -->
 </div>
 </template>
 
@@ -50,8 +52,8 @@ export default {
    }
 
    h2{
-      color: #6504b5;
-          font-weight: inherit;
+    color: #6504b5;
+    font-weight: inherit;
     font-style: inherit;
     font-family: inherit;
    }

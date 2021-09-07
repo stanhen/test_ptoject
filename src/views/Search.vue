@@ -21,7 +21,8 @@
           </div>
             <div>
             <label for="shelter">Shelter</label>
-            <input  v-model="shelter" name="shelter" >
+            <input  v-model="shelter" name="shelter" pattern="[A-Za-z]+"
+            title="The name can contain only Latin letters.">
           </div>
           <div>
             <label id="breed" for="breed">Select breed</label>
@@ -39,6 +40,7 @@
 
         </form> 
     <hr>
+    <h1>{{message}}</h1>
     <PetsList v-bind:pets='petsArr'/>
     <Loader v-if="loading" />
     <div v-if="find">
@@ -66,11 +68,13 @@ export default {
       breed: '',
       shelter: '',
       petsArr: [],
-      breeds: []
+      breeds: [], 
+      message: ''
     }
   },
   methods: {
     async getData() {
+      this.message = ''
       this.loading = true
       await axios
       HTTP.get(`findpets?animaltype=${this.type}&searchBreed=${this.breed}&location=${this.city}&page=${this.page}&breed=${this.breed}&limit=${this.limit}&location=${this.city}`, {
@@ -80,7 +84,10 @@ export default {
         }
       })
       .then((response) => {
-        if(response.data.pets.length == 20) {
+        if(response.data.pets.length == 0){
+          this.message = 'Nothing found'
+        }
+        if(response.data.pets.length == 18) {
         this.find = true
         } else {
           this.find = false
@@ -176,6 +183,7 @@ input {
    color: #2F4F4F; 
    font-size: 11px; 
    font-family: Tahoma; 
+   margin: 5px;
 }
 
 </style>

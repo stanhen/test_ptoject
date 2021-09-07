@@ -1,8 +1,8 @@
 <template>
   <div id="app" class="app">
-    <img class='logo' src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Petfinder_logo.png"
-      width="240"
-      height="50" 
+    <img @click="onbase" class='logo' src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Petfinder_logo.png"
+      width="250"
+      height="70" 
       alt="logo">
       <div class="hi_mess">
         <h4 v-if="auth">&#9989; Hi {{name}}</h4>
@@ -35,6 +35,9 @@ export default {
   }
   },
   methods: {
+    onbase(){
+      this.$router.push('/');
+    },
      log_in() {
       this.$router.push('/sign_in');
     },
@@ -47,6 +50,7 @@ export default {
         }
     })
     localStorage.removeItem('token')
+    localStorage.removeItem('name')
     },
     register() {
       this.$router.push('/register');
@@ -62,7 +66,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 5px;
   background-color: #efeef1;
 }
 .logo {
@@ -88,5 +91,9 @@ export default {
 .c-button:focus {
   outline: none;
   box-shadow: 0 0 0 4px #cbd6ee;
+}
+h4{
+  margin-top: 0px;
+  margin-bottom: 10px;
 }
 </style>

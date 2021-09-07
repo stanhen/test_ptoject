@@ -26,23 +26,6 @@
         </div>
     </main>
 </body>
- <!--<div class="home">
-    <form class="form" @submit.prevent="sendData">
-      <div class="form-control">
-        <label for="name">Name</label>
-        <input v-model="name" id="name" type="text" required oninvalid="this.setCustomValidity('Enter your name')">
-      </div>
-      <div class="form-control">
-        <label for="email">Email</label>
-        <input v-model="email" id="email" type="email" required oninvalid="this.setCustomValidity('Enter your email address')">
-      </div>
-      <div class="form-control">
-        <label for="password">password</label>
-        <input v-model="password" id="password" type="password" required oninvalid="this.setCustomValidity('Enter your password')">
-      </div>
-      <input type="submit" class="send" value="Send">
-    </form>
- </div> -->
 </template>
 
 <script>
