@@ -1,0 +1,243 @@
+<template>
+<body>
+    <main>
+        <div class="circle"></div>
+        <div class="register-form-container">
+            <form @submit.prevent="sendData">
+                <h1 class="form-title">
+                    Registration
+                </h1>
+                <div class="form-fields">
+                    <div class="form-field">
+                        <input  v-model="name" type="text" placeholder="Name" required minlength="3" pattern="[A-Za-z]+"
+                            title="The name can contain only Latin letters.">
+                    </div>
+                    <div class="form-field">
+                        <input  v-model="email" type="email" placeholder="Email" required>
+                    </div>
+                    <div class="form-field">
+                        <input v-model="password" type="password" placeholder="Password" required minlength="8" maxlength="128">
+                    </div>
+                </div>
+                <div class="form-buttons">
+                    <input type="submit" class="button" value="Send">
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+ <!--<div class="home">
+    <form class="form" @submit.prevent="sendData">
+      <div class="form-control">
+        <label for="name">Name</label>
+        <input v-model="name" id="name" type="text" required oninvalid="this.setCustomValidity('Enter your name')">
+      </div>
+      <div class="form-control">
+        <label for="email">Email</label>
+        <input v-model="email" id="email" type="email" required oninvalid="this.setCustomValidity('Enter your email address')">
+      </div>
+      <div class="form-control">
+        <label for="password">password</label>
+        <input v-model="password" id="password" type="password" required oninvalid="this.setCustomValidity('Enter your password')">
+      </div>
+      <input type="submit" class="send" value="Send">
+    </form>
+ </div> -->
+</template>
+
+<script>
+import {HTTP} from '../http/http-common';
+import axios from 'axios';
+ export default {
+   name: 'home',
+   data: function() {
+     return { 
+       name: '',
+       email:'',
+       password: ''
+      }
+     },
+     methods: {
+     async sendData() {
+     await axios
+     HTTP.post(`users`,{}, {
+      data: {
+      name: this.name,
+      email: this.email,
+      password: this.password
+    }
+    }).then((data) => {
+      localStorage.setItem('token', data.data.token)
+      localStorage.setItem('name', this.name)
+      this.$router.push('/');
+    })
+
+}
+  }
+ }
+</script>
+
+<style scoped>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Roboto', sans-serif;
+}
+input {
+    height: 45px;
+    width: 100%;
+    color: #3B5983;
+    font-size: 14px;
+    line-height: 16px;
+    border: 2px solid #E9F2FF;
+    border-radius: 5px;
+    padding-left: 25px;
+}
+input:focus {
+    outline: none;
+    border: 2px solid #C1D9FD;
+}
+input:valid {
+    border-color: greenyellow;
+}
+input:invalid {
+    border-color: orange;
+}
+input:not(:focus):invalid {
+    border-color: #C1D9FD;
+}
+main {
+    background: #F1F5FE;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.circle {
+    position: absolute;
+    z-index: 1;
+    width: 2534px;
+    height: 2534px;
+    border-radius: 50%;
+    background: #F7FAFF;
+    box-shadow: 0px 4px 70px 6px rgba(217, 229, 255, 0.25);
+    animation-name: fadeCircle;
+    animation-duration: .7s;
+    animation-timing-function: ease-in-out;
+    animation-delay: .3s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+@keyframes fadeCircle {
+    0% {
+        width: 2534px;
+        height: 2534px;
+    }
+    25% {
+        width: 2000px;
+        height: 2000px;
+    }
+    50% {
+        width: 1500px;
+        height: 1500px;
+    }
+    75% {
+        width: 1000px;
+        height: 1000px;
+    }
+    100% {
+        width: 534px;
+        height: 534px;
+    }
+}
+.register-form-container {
+    opacity: 0;
+    position: relative;
+    z-index: 2;
+    max-width: 415px;
+    width: 100%;
+    background: #FFFFFF;
+    box-shadow: 0px 6px 50px rgba(217, 229, 255, 0.7);
+    border-radius: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 38px;
+    padding-bottom: 38px;
+    animation-name: fadeForm;
+    animation-duration: .7s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 1.4s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+@keyframes fadeForm {
+    0% {
+        opacity: 0;
+    }
+    25% {
+        opacity: .25;
+    }
+    50% {
+        opacity: .5;
+    }
+    75% {
+        opacity: .75;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.form-title {
+    color: #30507D;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 23px;
+    margin-bottom: 38px;
+}
+.form-field {
+    margin-bottom: 13px;
+}
+.button {
+    width: 100%;
+    font-weight: bold;
+    font-size: 14px;
+    display:block;
+    height: 45px;
+    background: #247FFF;
+    border-radius: 5px;
+    color:#fff;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 45px;
+    cursor: pointer;
+    border: none;
+}
+.button:hover {
+    background-color: #0D6CF2;
+}
+a.button {
+    text-decoration: none;
+}
+.button-google {
+    color:#C6CFDC;
+    background: #F2F6FF;
+}
+.button-google:hover {
+    background: #E2E6F0;
+    color: #fff;
+}
+.divider {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;
+    color: #405D87;
+    text-align: center;
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+   
+</style>
