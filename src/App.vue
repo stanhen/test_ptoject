@@ -26,9 +26,6 @@ export default {
       name:'',
     }
   },
-  mounted() {
-    console.log(process.env.VUE_APP_URL)
-  },
   watch: {
     '$route': function() {
      if(localStorage.getItem('token') && localStorage.getItem('name')) {
