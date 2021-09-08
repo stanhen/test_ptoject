@@ -29,7 +29,8 @@
           </div> 
           <div>
             <label id="breed" for="breed">Select breed</label>
-            <input v-model="breed" type="search" placeholder="Search" list="data" />
+            <input v-if="!type" v-model="breed" type="search" placeholder="Choose type" list="data" readonly />
+            <input v-if="type" v-model="breed" type="search" placeholder="Search" list="data" />
 	            <datalist id="data">
               	<option  v-for="(item, index) in breeds" :key="index" :value="item" />
 	            </datalist>
