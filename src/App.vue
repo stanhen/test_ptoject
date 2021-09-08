@@ -18,20 +18,23 @@
 
 <script>
 import axios from 'axios';
-import {HTTP} from './http/http-common';
 export default {
   data() {
     return {
       auth: false,
       localAuthorization: localStorage.getItem("token") ,
-      name:''
+      name:'',
     }
   },
-
   mounted() {
+    console.log(process.env.VUE_APP_URL)
+  },
+  watch: {
+    '$route': function() {
      if(localStorage.getItem('token') && localStorage.getItem('name')) {
       this.auth = true
       this.name = localStorage.getItem('name')
+    }
   }
   },
   methods: {
@@ -43,12 +46,13 @@ export default {
     },
     async log_out() {
       await axios
-      HTTP.post(`users/logout`,{
+      .post(`${process.env.VUE_APP_URL}users/logout`,{},{
         headers:{
         "content-type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("token")
         }
     })
+    this.auth = false
     localStorage.removeItem('token')
     localStorage.removeItem('name')
     },
@@ -70,6 +74,9 @@ export default {
 }
 .logo {
   float: left;
+}
+img:hover {
+  cursor: pointer;
 }
 .c-button {
   min-width: 100px;

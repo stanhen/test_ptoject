@@ -3,6 +3,7 @@ const authData = require('../../middleware/authData')
 const getAnimals = require('../index')
 const getBreeds = require('../getsBreeds')
 const GetAnimalById = require('../getPetsOfId')
+const getShelters = require('../getShelterList')
 const router = new express.Router()
 
 router.get('/findpets', async (req, res) => {
@@ -12,7 +13,7 @@ router.get('/findpets', async (req, res) => {
         })
     }
 
-      const data = await getAnimals(req.query.animaltype, req.query.page, req.query.limit, req.query.breed, req.query.city)
+      const data = await getAnimals(req.query.animaltype, req.query.page, req.query.limit, req.query.breed, req.query.city,req.query.organization)
       .catch((err) => res.status(500).send(err))
         const pets = data.map((elem) => {
             return {
@@ -34,6 +35,13 @@ router.get('/breedsList', async(req, res) => {
 
 })
 
+router.get('/shelterList', async(req, res) => {
+    getShelters().then((shelters) =>{
+        let sheltersName = shelters.map((name) => name.id)
+        res.status(200).send({sheltersName})
+    }).catch((e) => res.status(500).send(e))
+
+})
 
 router.get('/pets/:id',authData , async (req, res) => {
     GetAnimalById(req.params.id).then((data) => {

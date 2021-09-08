@@ -19,30 +19,29 @@
             <label for="city">City</label>
             <input  v-model="city" name="city" >
           </div>
-            <div>
-            <label for="shelter">Shelter</label>
-            <input  v-model="shelter" name="shelter" pattern="[A-Za-z]+"
-            title="The name can contain only Latin letters.">
-          </div>
+          <div>
+            <label id="shelter" for="shelter">Select shelter</label>
+            <input v-model="shelter" type="search" placeholder="Search" list="data_shelter" />
+	            <datalist id="data_shelter">
+              	<option  v-for="(item, index) in shelters" :key="index" :value="item" />
+	            </datalist>
+            <div class="select-arrow"></div> 
+          </div> 
           <div>
             <label id="breed" for="breed">Select breed</label>
             <input v-model="breed" type="search" placeholder="Search" list="data" />
 	            <datalist id="data">
-              <select name="breeds" miltiple="miltiple" size="10">
               	<option  v-for="(item, index) in breeds" :key="index" :value="item" />
-              </select>
 	            </datalist>
             <div class="select-arrow"></div> 
           </div> 
           <button type="submit">Search</button> 
-        
         </div>
-
         </form> 
     <hr>
-    <h1>{{message}}</h1>
     <PetsList v-bind:pets='petsArr'/>
     <Loader v-if="loading" />
+    <h1 v-if="message" class="not_found">{{message}}</h1>
     <div v-if="find">
       <button @click="previousPage">Back</button>
       <button @click="nextPage">Next</button> 
@@ -53,31 +52,39 @@
 <script>
 import axios from 'axios';
 import PetsList from '@/components/PetsList'
-import {HTTP} from '../http/http-common';
 import Loader from '@/components/Loader'
 export default {
   name: 'app',
   data() {
     return {
       page: 1,
-      limit: 18,
+      limit: 20,
       loading: false,
       find: false,
       type: '',
       city: '',
       breed: '',
       shelter: '',
+      shelters: [],
       petsArr: [],
       breeds: [], 
       message: ''
     }
+  },
+  mounted(){
+      this.shelters=[]
+       axios
+      .get(`${process.env.VUE_APP_URL}shelterList`)
+      .then((shelterList) => {
+        this.shelters = shelterList.data.sheltersName
+      })
   },
   methods: {
     async getData() {
       this.message = ''
       this.loading = true
       await axios
-      HTTP.get(`findpets?animaltype=${this.type}&searchBreed=${this.breed}&location=${this.city}&page=${this.page}&breed=${this.breed}&limit=${this.limit}&location=${this.city}`, {
+      .get(`${process.env.VUE_APP_URL}findpets?animaltype=${this.type}&searchBreed=${this.breed}&location=${this.city}&page=${this.page}&breed=${this.breed}&limit=${this.limit}&location=${this.city}&organization=${this.shelter}`, {
         headers:{
         "content-type": "application/json",
          Authorization: "Bearer " + localStorage.getItem("token")
@@ -87,7 +94,7 @@ export default {
         if(response.data.pets.length == 0){
           this.message = 'Nothing found'
         }
-        if(response.data.pets.length == 18) {
+        if(response.data.pets.length == 20) {
         this.find = true
         } else {
           this.find = false
@@ -99,10 +106,9 @@ export default {
     async getBreeds() {
       this.breeds=[]
       await axios
-      HTTP.get(`breedsList?type=${this.type}`)
+      .get(`${process.env.VUE_APP_URL}breedsList?type=${this.type}`)
       .then((breedsListName) => {
         this.breeds = breedsListName.data.breedName
-
       })
     },
     async nextPage() {
@@ -125,6 +131,11 @@ export default {
 </script>
 
 <style scoped>
+.not_found{
+  padding-bottom: 479px;
+  margin-bottom: 0px;
+  background-color: #efeef1;
+}
 .form_line, .radio {
    display: flex;
  }
@@ -185,5 +196,6 @@ input {
    font-family: Tahoma; 
    margin: 5px;
 }
+
 
 </style>

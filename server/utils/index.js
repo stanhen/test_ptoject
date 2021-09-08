@@ -1,7 +1,7 @@
 var petfinder = require("@petfinder/petfinder-js");
 
 //API server request
-async function showAnimals(animalType, page, limit, breedName, city) {
+async function showAnimals(animalType, page, limit, breedName, city, organizationID) {
   const client = new petfinder.Client({ apiKey: process.env.API_KEY, secret: process.env.SECRET_API});
   let apiResult
   let data = [];
@@ -9,7 +9,7 @@ async function showAnimals(animalType, page, limit, breedName, city) {
       type: animalType,
       breed: breedName,
       location: city,
-//      organization: organizationID,
+      organization: organizationID,
       page,
       limit,
     })

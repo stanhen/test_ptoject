@@ -22,6 +22,7 @@
                 <div class="form-buttons">
                     <input type="submit" class="button" value="Send">
                 </div>
+                <h3>{{message}}</h3>
             </form>
         </div>
     </main>
@@ -29,7 +30,6 @@
 </template>
 
 <script>
-import {HTTP} from '../http/http-common';
 import axios from 'axios';
  export default {
    name: 'home',
@@ -37,13 +37,15 @@ import axios from 'axios';
      return { 
        name: '',
        email:'',
-       password: ''
+       password: '',
+       message:''
       }
      },
      methods: {
      async sendData() {
+     this.message = ''
      await axios
-     HTTP.post(`users`,{}, {
+     .post(`${process.env.VUE_APP_URL}users`,{}, {
       data: {
       name: this.name,
       email: this.email,
@@ -53,8 +55,9 @@ import axios from 'axios';
       localStorage.setItem('token', data.data.token)
       localStorage.setItem('name', this.name)
       this.$router.push('/');
+    }).catch(() => {
+        this.message = 'User already exists or you entere incorrect values'
     })
-
 }
   }
  }

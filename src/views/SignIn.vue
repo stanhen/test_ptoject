@@ -27,7 +27,6 @@
 
 <script>
 import axios from 'axios';
-import {HTTP} from '../http/http-common';
 export default {
     data() {
         return {
@@ -39,14 +38,14 @@ export default {
     methods: {
       async signin() {
       await axios
-      HTTP.post(`users/login`,{} ,{
+      .post(`${process.env.VUE_APP_URL}users/login`,{} ,{
       data: {
       email: this.email,
       password: this.password
     }
     }).then((data) => {
-        localStorage.setItem('token', data.data.token)
-      localStorage.setItem('name', this.name)
+      localStorage.setItem('token', data.data.token)
+      localStorage.setItem('name', data.data.user.name)
       if(data.data.message) {
         this.message = data.data.message
       } else {

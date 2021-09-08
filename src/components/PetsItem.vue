@@ -33,6 +33,9 @@ export default {
 
 
 <style scoped>
+   img:hover {
+     cursor: pointer;
+   }
    .pet {
       display: inline-block;
       background: #fff;
