@@ -30,10 +30,6 @@
       <h2 v-if="petsArr.organization_id">&#128062;</h2>
       <h2>{{petsArr.organization_id}}</h2>
     </span>
-
-
-
-
   </div>
 </template>
 
@@ -56,7 +52,6 @@ export default {
       this.info = false
   }
     },
-
     methods: {
       async fetchPetRequest() {
       this.loading = true
@@ -84,6 +79,4 @@ export default {
 h2{
   display: inline;
 }
-
-
 </style>

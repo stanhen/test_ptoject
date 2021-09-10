@@ -21,7 +21,7 @@ router.post('/users/login', async (req, res) => {
         const token = await user.generateAuthToken()
         res.status(201).send({ user, token })
     } catch (e) {
-        res.send({"message": "Wrong login or password"})
+        res.status(400).send({"message": "Wrong login or password"})
     }
 })
 

@@ -37,6 +37,7 @@ export default {
     },
     methods: {
       async signin() {
+          this.message = ''
       await axios
       .post(`${process.env.VUE_APP_URL}users/login`,{} ,{
       data: {
@@ -51,9 +52,11 @@ export default {
       } else {
         this.$router.push('/');
       }
+    }).catch(() => {
+        this.message = 'Wrong login or password'
     })
-      }
-    }
+   }
+  }
 }
 
 </script>

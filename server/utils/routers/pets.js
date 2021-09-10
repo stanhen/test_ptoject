@@ -12,8 +12,7 @@ router.get('/findpets', async (req, res) => {
             error: 'Insufficient data'
         })
     }
-
-      const data = await getAnimals(req.query.animaltype, req.query.page, req.query.limit, req.query.breed, req.query.city,req.query.organization)
+      const data = await getAnimals(req.query.animaltype, req.query.page, req.query.limit, req.query.breed, req.query.city ,req.query.organization)
       .catch((err) => res.status(500).send(err))
         const pets = data.map((elem) => {
             return {

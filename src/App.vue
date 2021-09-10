@@ -35,8 +35,24 @@ export default {
   }
   },
   methods: {
-    onbase(){
-      this.$router.push('/');
+    async onbase(){
+      try {
+      await this.$router.push('/');
+      this.type = sessionStorage.removeItem('type')
+      this.page = sessionStorage.removeItem('page')
+      this.breed = sessionStorage.removeItem('breed')
+      this.city = sessionStorage.removeItem('city')
+      this.shelter = sessionStorage.removeItem('shelter')
+      window.location.reload() 
+      } catch(e) {
+      this.type = sessionStorage.removeItem('type')
+      this.page = sessionStorage.removeItem('page')
+      this.breed = sessionStorage.removeItem('breed')
+      this.city = sessionStorage.removeItem('city')
+      this.shelter = sessionStorage.removeItem('shelter')
+      window.location.reload() 
+      }
+
     },
      log_in() {
       this.$router.push('/sign_in');
@@ -52,6 +68,7 @@ export default {
     this.auth = false
     localStorage.removeItem('token')
     localStorage.removeItem('name')
+    window.location.reload() 
     },
     register() {
       this.$router.push('/register');

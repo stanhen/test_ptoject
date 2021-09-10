@@ -1,12 +1,12 @@
 <template>
-<div @click="open_info" class="pet">
-   <img v-if="pet.photo" class="pet_photo"
+<div  class="pet">
+   <img @click="open_info" v-if="pet.photo" class="pet_photo"
       width="220"
       height="220"     
       :src=pet.photo
       :alt="small"
    >
-   <img v-if="!pet.photo" class="pet_photo"
+   <img @click="open_info" v-if="!pet.photo" class="pet_photo"
       width="220"
       height="220"     
       src="https://www.tsum.by/upload/no-photo.png"

@@ -8,7 +8,7 @@ async function showAnimals(animalType, page, limit, breedName, city, organizatio
     apiResult = await client.animal.search({
       type: animalType,
       breed: breedName,
-      location: city,
+      location:city,
       organization: organizationID,
       page,
       limit,

@@ -1,9 +1,9 @@
 <template>
   <div>
-        <form  @submit.prevent="getData" class="form">
+        <form @submit.prevent="getData" class="form" id="form">
             <div class="radio">
             <label class="radio">
-              <input v-model="type" @change="getBreeds" type="radio" name="type" value="Dog" required oninvalid="this.setCustomValidity('Please select the type of animal')">Dog
+              <input v-model="type" @change="getBreeds" type="radio" name="type" value="Dog" required   oninvalid="this.setCustomValidity('Please select the type of animal')" oninput="this.setCustomValidity('')">Dog
               <div class="radio__text"></div>
             </label>
             <label class="radio">
@@ -17,26 +17,29 @@
         <div class="form_line">
           <div>
             <label for="city">City</label>
-            <input  v-model="city" name="city" >
+            <input @click.prevent="choose_type" v-if="!type" type="search" placeholder="Choose type" readonly />
+            <input v-if="type" v-model="city" name="city" >
           </div>
           <div>
             <label id="shelter" for="shelter">Select shelter</label>
-            <input v-model="shelter" type="search" placeholder="Search" list="data_shelter" />
+            <input @click.prevent="choose_type" v-if="!type" type="search" placeholder="Choose type" readonly />
+            <input v-if="type" v-model="shelter" type="search" placeholder="Search" list="data_shelter" />
 	            <datalist id="data_shelter">
-              	<option  v-for="(item, index) in shelters" :key="index" :value="item" />
+                <option  v-for="(item, index) in shelters" :key="index">{{item}}</option>
 	            </datalist>
             <div class="select-arrow"></div> 
           </div> 
           <div>
             <label id="breed" for="breed">Select breed</label>
-            <input v-if="!type" v-model="breed" type="search" placeholder="Choose type" list="data" readonly />
+            <input @click.prevent="choose_type" v-if="!type" type="search" placeholder="Choose type" list="data" readonly />
             <input v-if="type" v-model="breed" type="search" placeholder="Search" list="data" />
 	            <datalist id="data">
-              	<option  v-for="(item, index) in breeds" :key="index" :value="item" />
+                <option  v-for="(item, index) in breeds" :key="index">{{item}}</option>
 	            </datalist>
             <div class="select-arrow"></div> 
           </div> 
-          <button type="submit">Search</button> 
+          <button id="submit" type="submit">Search</button> 
+          <button @click="clear" id="clear" type="reset">Clear form</button> 
         </div>
         </form> 
     <hr>
@@ -73,19 +76,39 @@ export default {
     }
   },
   mounted(){
-      this.shelters=[]
-       axios
-      .get(`${process.env.VUE_APP_URL}shelterList`)
-      .then((shelterList) => {
-        this.shelters = shelterList.data.sheltersName
-      })
+    if(sessionStorage.getItem('type')) {
+      this.type = sessionStorage.getItem('type')
+      this.page = sessionStorage.getItem('page')
+      this.breed = sessionStorage.getItem('breed')
+      this.city = sessionStorage.getItem('city')
+      this.shelter = sessionStorage.getItem('shelter')
+      this.getData()
+      this.getBreeds()
+    }
   },
   methods: {
+    clear() {
+      this.type = sessionStorage.removeItem('type')
+      this.page = 1
+      this.breed = sessionStorage.removeItem('breed')
+      this.city = sessionStorage.removeItem('city')
+      this.shelter = sessionStorage.removeItem('shelter')
+    },
+    choose_type() {
+     const sub = document.getElementById('submit')
+     sub.click()
+    },
     async getData() {
+      sessionStorage.setItem('type', this.type)
+      sessionStorage.setItem('page', this.page)
+      sessionStorage.setItem('breed', this.breed)
+      sessionStorage.setItem('city', this.city)
+      sessionStorage.setItem('shelter', this.shelter)
+
       this.message = ''
       this.loading = true
       await axios
-      .get(`${process.env.VUE_APP_URL}findpets?animaltype=${this.type}&searchBreed=${this.breed}&location=${this.city}&page=${this.page}&breed=${this.breed}&limit=${this.limit}&location=${this.city}&organization=${this.shelter}`, {
+      .get(`${process.env.VUE_APP_URL}findpets?animaltype=${this.type}&page=${this.page}&breed=${this.breed}&limit=${this.limit}&location=${this.city}&organization=${this.shelter}`, {
         headers:{
         "content-type": "application/json",
          Authorization: "Bearer " + localStorage.getItem("token")
@@ -105,7 +128,18 @@ export default {
       })
     },
     async getBreeds() {
+      if ( this.type !== sessionStorage.getItem('type') ){
+      this.shelter = ''
+      this.breed  = ''
+      this.city = ''
       this.breeds=[]
+      this.shelters=[]
+      }
+      await axios
+      .get(`${process.env.VUE_APP_URL}shelterList`)
+      .then((shelterList) => {
+        this.shelters = shelterList.data.sheltersName
+      })
       await axios
       .get(`${process.env.VUE_APP_URL}breedsList?type=${this.type}`)
       .then((breedsListName) => {
@@ -197,6 +231,4 @@ input {
    font-family: Tahoma; 
    margin: 5px;
 }
-
-
 </style>
